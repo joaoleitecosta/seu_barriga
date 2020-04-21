@@ -1,6 +1,7 @@
 require('dotenv').config();
 const jwt = require('jwt-simple');
 const bcrypt = require('bcrypt-nodejs');
+const ValidateError = require('../erros/validation_error');
 
 module.exports = (app) => {
   const signin = (req, res, next) => {
@@ -16,7 +17,7 @@ module.exports = (app) => {
           const token = jwt.encode(payload, process.env.SECRET);
 
           return res.status(200).json({ token });
-        }
+        } else throw new ValidateError('Usuário ou senha inválidos');
       })
       .catch((error) => next(error));
   };
