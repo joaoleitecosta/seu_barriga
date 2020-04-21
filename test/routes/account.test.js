@@ -50,7 +50,7 @@ test('Deve retornar uma conta por id', () => {
     });
 });
 
-test('Deve poder alterar um usuario', () => {
+test('Deve poder alterar uma conta', () => {
   return app
     .db('accounts')
     .insert({ name: 'Acc by put', user_id: user.id }, ['id'])
@@ -62,5 +62,15 @@ test('Deve poder alterar um usuario', () => {
     .then((result) => {
       expect(result.status).toBe(200);
       expect(result.body.name).toBe('Acc update');
+    });
+});
+
+test('Deve remover uma conta', () => {
+  return app
+    .db('accounts')
+    .insert({ name: 'Acc delete', user_id: user.id }, ['id'])
+    .then((acc) => request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`))
+    .then((result) => {
+      expect(result.status).toBe(204);
     });
 });
