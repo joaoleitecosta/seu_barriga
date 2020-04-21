@@ -34,3 +34,16 @@ test('Não deve autenticar usuário com senha errada', () => {
       expect(result.body.error).toBe('Usuário ou senha inválidos');
     });
 });
+
+test('Não de autenticar usuário que não existe', () => {
+  return request(app)
+    .post('/auth/signin')
+    .send({
+      email: 'usuario_nao_existe@TextDecoderStream.com.br',
+      password: 123456,
+    })
+    .then((result) => {
+      expect(result.status).toBe(400);
+      expect(result.body.error).toBe('Usuário ou senha inválidos');
+    });
+});
