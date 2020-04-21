@@ -22,3 +22,30 @@ test('Deve inserir uma conta com sucesso', () =>
       expect(result.status).toBe(201);
       expect(result.body.name).toBe('Acc #1');
     }));
+
+test('Deve listar todas as contas', () => {
+  return app
+    .db('accounts')
+    .insert({ name: 'Acc list', user_id: user.id })
+    .then(() => {
+      request(app)
+        .get(MAIN_ROUTE)
+        .then((result) => {
+          expect(result.status).toBe(200);
+          expect(result.body.length).toBeGreaterThan(0);
+          expect(result.body[0]).toHaveProperty('name');
+        });
+    });
+});
+
+test('Deve retornar uma conta por id', () => {
+  return app
+    .db('accounts')
+    .insert({ name: 'Acc by id', user_id: user.id }, ['id'])
+    .then((acc) => request(app).get(`${MAIN_ROUTE}/${acc[0].id}`))
+    .then((result) => {
+      expect(result.status).toBe(200);
+      expect(result.body.name).toBe('Acc by id');
+      expect(result.body.user_id).toBe(user.id);
+    });
+});

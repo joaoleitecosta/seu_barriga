@@ -1,5 +1,11 @@
 module.exports = (app) => {
   const save = (account) => app.db('accounts').insert(account, '*');
 
-  return { save };
+  const findAll = () => app.db('accounts').select();
+
+  const findById = (filter = {}) => {
+    return app.db('accounts').where(filter).first();
+  };
+
+  return { save, findAll, findById };
 };
