@@ -11,6 +11,7 @@ test('Deve listar todos os usuários', () =>
       expect(res.status).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
       expect(res.body[0]).toHaveProperty('name', 'Walter Mitty');
+      expect(res.body).not.toHaveProperty('password');
     }));
 
 test('Deve inserir usuário com sucesso', () =>
@@ -24,7 +25,30 @@ test('Deve inserir usuário com sucesso', () =>
     .then((res) => {
       expect(res.status).toBe(201);
       expect(res.body.name).toBe('Walter Mitty');
+      expect(res.body).not.toHaveProperty('password');
     }));
+
+test('Deve armazenar senha criptografada', async () => {
+  const res = await request(app)
+    .post('/users')
+    .send({
+      name: 'Walter Mitty',
+      email: `${Date.now()}@mail.com`,
+      password: '123456',
+    });
+
+  expect(res.status).toBe(201);
+
+  const { id } = res.body;
+
+  // const user = await app.db('users').where({ id }).select();
+  // expect(user[0]).toHaveProperty('password');
+
+  const userDB = await app.services.user.findOne({ id });
+
+  expect(userDB.password).not.toBeUndefined();
+  expect(userDB.password).not.toBe('123456');
+});
 
 test('Não deve inserir usuario sem nome', () =>
   request(app)

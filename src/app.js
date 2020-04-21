@@ -16,8 +16,18 @@ consign({ cwd: 'src', verbose: false })
   .then('./config/routes.js')
   .into(app);
 
-app.get('/', (req, res) => {
-  res.status(200).send();
+app.use((err, req, res, next) => {
+  const { name, message, stack } = err;
+
+  if (name === 'ValidationError') res.status(400).json({ error: message });
+  else res.status(500).json({ name, message, stack });
+  next();
+});
+
+app.use((req, res) => {
+  res
+    .status(404)
+    .send({ error: 'Você está tentando acessar uma rota que não existe' });
 });
 
 // app.db
