@@ -20,7 +20,7 @@ module.exports = (app) => {
 
   router.get('/:id', (req, res, next) =>
     app.services.account
-      .findById({ id: req.params.id })
+      .find({ id: req.params.id })
       .then((result) => res.status(200).json(result))
       .catch((error) => next(error))
   );
