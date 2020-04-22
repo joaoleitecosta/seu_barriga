@@ -66,7 +66,7 @@ test('Não de autenticar usuário que não existe', () => {
 
 test('Não deve acessar uma rota protegida sem token', () => {
   return request(app)
-    .get('/users')
+    .get('/v1/users')
     .then((result) => {
       expect(result.status).toBe(401);
     });

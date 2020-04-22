@@ -1,35 +1,43 @@
+const express = require('express');
 module.exports = (app) => {
-  const create = (req, res, next) =>
+  const router = express.Router();
+
+  router.post('/', (req, res, next) => {
     app.services.account
-      .save(req.body)
+      .save({ ...req.body, user_id: req.user.id })
       .then((result) => {
         return res.status(201).json(result[0]);
       })
       .catch((error) => next(error));
+  });
 
-  const findAll = (req, res, next) =>
+  router.get('/', (req, res, next) =>
     app.services.account
-      .findAll()
+      .findAll(req.user.id)
       .then((result) => res.status(200).json(result))
-      .catch((error) => next(error));
+      .catch((error) => next(error))
+  );
 
-  const findById = (req, res, next) =>
+  router.get('/:id', (req, res, next) =>
     app.services.account
       .findById({ id: req.params.id })
       .then((result) => res.status(200).json(result))
-      .catch((error) => next(error));
+      .catch((error) => next(error))
+  );
 
-  const update = (req, res, next) =>
+  router.put('/:id', (req, res, next) =>
     app.services.account
       .update(req.params.id, req.body)
       .then((result) => res.status(200).json(result[0]))
-      .catch((error) => next(error));
+      .catch((error) => next(error))
+  );
 
-  const remove = (req, res, next) =>
+  router.delete('/:id', (req, res, next) =>
     app.services.account
       .remove({ id: req.params.id })
       .then(() => res.status(204).send())
-      .catch((error) => next(error));
+      .catch((error) => next(error))
+  );
 
-  return { create, findAll, findById, update, remove };
+  return router;
 };

@@ -14,7 +14,7 @@ consign({ cwd: 'src', verbose: false })
   .then('./config/middlewares.js')
   .then('./services')
   .then('./routes')
-  .then('./config/routes.js')
+  .then('./config/router.js')
   .into(app);
 
 app.use((err, req, res, next) => {
@@ -25,11 +25,11 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.use((req, res) => {
-  res
-    .status(404)
-    .send({ error: 'Você está tentando acessar uma rota que não existe' });
-});
+// app.use((req, res) => {
+//   res
+//     .status(404)
+//     .send({ error: 'Você está tentando acessar uma rota que não existe' });
+// });
 
 // app.db
 //   .on('query', (query) => {

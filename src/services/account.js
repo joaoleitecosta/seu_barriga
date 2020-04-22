@@ -7,7 +7,9 @@ module.exports = (app) => {
     return app.db('accounts').insert(account, '*');
   };
 
-  const findAll = () => app.db('accounts').select();
+  const findAll = (user_id) => {
+    return app.db('accounts').where({ user_id });
+  };
 
   const findById = (filter = {}) => {
     return app.db('accounts').where(filter).first();
