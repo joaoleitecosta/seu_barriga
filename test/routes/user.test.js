@@ -30,7 +30,7 @@ test('Deve listar todos os usuários', () =>
     .then((res) => {
       expect(res.status).toBe(200);
       expect(res.body.length).toBeGreaterThan(0);
-      expect(res.body[0]).toHaveProperty('name', 'Walter Mitty');
+      expect(res.body[0]).toHaveProperty('name');
       expect(res.body).not.toHaveProperty('password');
     }));
 
